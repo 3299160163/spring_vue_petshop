@@ -1,0 +1,71 @@
+server:
+  port: 8080
+  tomcat:
+      connection-timeout: 30000    # 连接超时时间（毫秒）
+      keep-alive-timeout: 20000    # Keep-Alive连接存活时间（毫秒）
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/petshop?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
+      # 建议补充其他连接池配置
+      minimum-idle: 5
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  servlet:
+    multipart:
+      enabled: true  # 确保启用 multipart
+      max-file-size: 50MB
+      max-request-size: 100MB
+        # 禁用 Thymeleaf
+  thymeleaf:
+      check-template-location: false
+      enabled: false
+  # 文件存储配置（独立配置项）
+file:
+  upload-dir: /var/www/uploads/pet_images  # 根据操作系统调整路径
+  allowed-types: jpg,png,jpeg
+
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto  # 修正为AUTO（基于数据库自增ID）
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  mapper-locations: classpath*:/mapper/**/*.xml  # 修正路径格式
+  type-aliases-package: com.petshop.entity , com.petshop.dto
+  configuration:
+    default-enum-type-handler: com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # SQL日志输出
+
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    # 按模块细化日志级别
+    com.petshop.controller: DEBUG
+    com.petshop.service: DEBUG
+    com.petshop.mapper: DEBUG  # 建议使用TRACE查看详细SQL
+    org.mybatis: INFO
+    org.springframework.jdbc: DEBUG
+    com.baomidou.mybatisplus: WARN  # 减少MP框架日志
+    org.springframework.web.cors: DEBUG
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+    com.petshop: DEBUG # 启用项目包下的日志
+    org.springframework.messaging: TRACE      # 启用消息处理日志
+    org.springframework.web.socket: TRACE    # 启用 WebSocket 日志
+    org.springframework.web.socket.handler.LoggingWebSocketHandlerDecorator: DEBUG
+
+
+jwt:
+  secret: "Qygr6GJDy5qFlSJcr4WGZLZC6oRExwCy1utw1hezh6w="  # Base64 编码的密钥
+  expiration: 86400000  # 24小时（单位：毫秒）

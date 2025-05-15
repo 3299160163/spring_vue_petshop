@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.petshop.mapper.OrderMapper">
+
+    <select id="selectOrderWithDetail" resultMap="OrderDetailMap">
+        SELECT
+            o.order_no,
+            o.buyer_id,
+            o.seller_id,
+            o.pet_id,
+            o.amount,
+            CASE o.status
+                WHEN 1 THEN '待处理'
+                WHEN 2 THEN '处理中'
+                WHEN 3 THEN '已完成'
+                WHEN 4 THEN '已取消'
+                END AS status,
+            (SELECT user_name FROM user WHERE id = o.buyer_id) AS buyer_name,
+            (SELECT user_name FROM user WHERE id = o.seller_id) AS seller_name,
+            (SELECT name FROM pet WHERE id = o.pet_id) AS pet_name
+        FROM `order` o
+        WHERE o.order_no = #{orderNo}
+    </select>
+
+    <resultMap id="OrderDetailMap" type="com.petshop.dto.OrderDTO">
+        <!-- 基础字段 -->
+        <result column="order_no" property="orderNo"/>
+        <result column="buyer_id" property="buyerId"/>
+        <result column="seller_id" property="sellerId"/>
+        <result column="pet_id" property="petId"/>
+        <result column="amount" property="amount"/>
+        <!-- 状态字段（直接映射为描述） -->
+        <result column="status" property="status"/>
+        <!-- 关联字段 -->
+        <result column="buyer_name" property="buyerName"/>
+        <result column="seller_name" property="sellerName"/>
+        <result column="pet_name" property="petName"/>
+    </resultMap>
+</mapper>

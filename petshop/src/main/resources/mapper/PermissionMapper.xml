@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.petshop.mapper.PermissionMapper">
+
+    <!-- 根据用户ID查询权限编码列表 -->
+    <select id="getPermissionsByUserId" resultType="java.lang.String">
+        SELECT DISTINCT p.perm_code
+        FROM permission p
+                 INNER JOIN role_permission rp ON p.perm_code = rp.perm_code
+                 INNER JOIN user_role ur ON rp.role_code = ur.role_code
+        WHERE ur.user_id = #{userId}
+    </select>
+
+    <!-- 根据权限代码列表查询权限实体列表 -->
+    <select id="selectByPermCodes" resultType="com.petshop.entity.Permission">
+        SELECT *
+        FROM permission
+        WHERE perm_code IN
+        <foreach item="code" collection="permCodes" open="(" separator="," close=")">
+            #{code}
+        </foreach>
+    </select>
+
+</mapper>

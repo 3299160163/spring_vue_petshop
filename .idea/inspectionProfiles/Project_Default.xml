@@ -1,0 +1,83 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="VulnerableLibrariesLocal" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="isIgnoringEnabled" value="true" />
+      <option name="ignoredModules">
+        <list>
+          <option value="petshop" />
+          <option value="petshop" />
+          <option value="petshop" />
+          <option value="petshop" />
+          <option value="petshop" />
+          <option value="petshop" />
+          <option value="petshop" />
+          <option value="petshop" />
+          <option value="petshop" />
+          <option value="petshop" />
+          <option value="petshop" />
+          <option value="petshop" />
+          <option value="petshop" />
+          <option value="petshop" />
+          <option value="pet-shop-backend" />
+          <option value="pet-shop-backend" />
+          <option value="pet-shop-backend" />
+          <option value="pet-shop-backend" />
+          <option value="pet-shop-backend" />
+          <option value="pet-shop-backend" />
+          <option value="pet-shop-backend" />
+        </list>
+      </option>
+      <option name="ignoredPackages">
+        <list>
+          <option value="com.baomidou:mybatis-plus:3.4.1" />
+          <option value="org.springframework.security:spring-security-core:6.1.5" />
+          <option value="org.springframework.security:spring-security-web:6.1.5" />
+          <option value="com.jayway.jsonpath:json-path:2.8.0" />
+          <option value="org.xmlunit:xmlunit-core:2.9.1" />
+          <option value="ch.qos.logback:logback-classic:1.4.11" />
+          <option value="ch.qos.logback:logback-core:1.4.11" />
+          <option value="org.apache.tomcat.embed:tomcat-embed-core:10.1.15" />
+          <option value="org.apache.tomcat.embed:tomcat-embed-websocket:10.1.15" />
+          <option value="org.springframework:spring-context:6.0.13" />
+          <option value="org.springframework:spring-web:6.0.13" />
+          <option value="org.springframework:spring-webmvc:6.0.13" />
+          <option value="org.yaml:snakeyaml:1.33" />
+          <option value="org.springframework.security:spring-security-crypto:6.1.5" />
+          <option value="io.netty:netty-common:4.1.100.Final" />
+          <option value="io.netty:netty-handler:4.1.100.Final" />
+          <option value="com.jayway.jsonpath:json-path:2.8.0" />
+          <option value="org.apache.tomcat.embed:tomcat-embed-core:10.1.15" />
+          <option value="org.apache.tomcat.embed:tomcat-embed-websocket:10.1.15" />
+          <option value="org.springframework:spring-context:6.0.13" />
+          <option value="org.springframework:spring-web:6.0.13" />
+        </list>
+      </option>
+      <option name="ignoredReasons">
+        <list>
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+          <option value="不可利用" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.petshop.mapper.UserMapper">
+
+    <!-- 通用用户字段映射 -->
+    <resultMap id="BaseResultMap" type="com.petshop.entity.User">
+        <id column="id" property="id"/>
+        <result column="user_name" property="username"/>
+        <result column="password" property="password"/>
+        <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 包含角色的用户映射：通过嵌套查询加载角色 -->
+    <resultMap id="UserWithRolesMap" type="com.petshop.entity.User" extends="BaseResultMap">
+        <collection property="roles" ofType="string"
+                    select="selectRolesByUserId" column="id"/>
+    </resultMap>
+
+    <!-- 根据用户ID查询角色列表 -->
+    <select id="selectRolesByUserId" resultType="string">
+        SELECT role_code
+        FROM user_role
+        WHERE user_id = #{id}
+    </select>
+
+    <!-- 根据用户名查询用户及其角色（修复版） -->
+    <select id="findUserWithRolesByUsername" resultMap="UserWithRolesMap">
+        SELECT u.*
+        FROM user u
+        WHERE u.user_name = #{username}
+    </select>
+
+    <!-- 检查用户名是否存在 -->
+    <select id="existsByUsername" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM user
+        WHERE user_name = #{username}
+    </select>
+
+    <!-- 分页查询用户（动态条件，修复版） -->
+    <select id="selectUsersPage" resultMap="UserWithRolesMap">
+        SELECT u.*
+        FROM user u
+        <where>
+            <if test="username != null and username != ''">
+                AND u.user_name LIKE CONCAT('%', #{username}, '%')
+            </if>
+            <if test="role != null and role != ''">
+                AND EXISTS (
+                SELECT 1 FROM user_role ur
+                WHERE ur.user_id = u.id AND ur.role_code = #{role}
+                )
+            </if>
+        </where>
+    </select>
+
+    <!-- 分页统计总数（独立COUNT查询） -->
+    <select id="countUsersPage" resultType="long">
+        SELECT COUNT(*)
+        FROM user u
+        <where>
+            <if test="username != null and username != ''">
+                AND u.user_name LIKE CONCAT('%', #{username}, '%')
+            </if>
+            <if test="role != null and role != ''">
+                AND EXISTS (
+                SELECT 1 FROM user_role ur
+                WHERE ur.user_id = u.id AND ur.role_code = #{role}
+                )
+            </if>
+        </where>
+    </select>
+
+    <!-- ✅ 定义 findUsernameById 的 SQL -->
+    <select id="findUsernameById" resultType="java.lang.String">
+        SELECT user_name
+        FROM user
+        WHERE id = #{userId}
+    </select>
+
+</mapper>
+
+
+
+
+
+
+

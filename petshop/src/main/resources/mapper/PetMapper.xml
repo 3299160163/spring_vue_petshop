@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.petshop.mapper.PetMapper">
+
+    <!-- 处理枚举类型映射 -->
+    <resultMap id="petResultMap" type="com.petshop.entity.Pet">
+        <result column="category" property="category"
+                typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result column="status" property="status"
+                typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+    </resultMap>
+
+    <!-- 统计卖家拥有的宠物数量 -->
+    <select id="countBySellerId" resultType="int">
+        SELECT COUNT(*) FROM pet WHERE seller_id = #{sellerId}
+    </select>
+
+</mapper>
