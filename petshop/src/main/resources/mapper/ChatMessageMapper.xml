@@ -3,8 +3,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.petshop.mapper.ChatMessageMapper">
 
-
-    <!-- 📁 src/main/resources/mapper/ChatMessageMapper.xml -->
     <select id="selectChatSummaries" resultType="ChatSummaryDTO">
         WITH FilteredMessages AS (
         SELECT
@@ -19,7 +17,13 @@
         FROM chat_message
         WHERE
         (sender_id = #{userId} OR receiver_id = #{userId})
-        AND sender_id &lt;&gt; receiver_id  <!-- ✅ 使用 XML 转义符号 -->
+        AND sender_id &lt;&gt; receiver_id
+        <!-- 新增逻辑：过滤用户已删除的消息 -->
+        AND (
+        (sender_id = #{userId} AND COALESCE(sender_deleted, false) = false)
+        OR
+        (receiver_id = #{userId} AND COALESCE(receiver_deleted, false) = false)
+        )
         ),
         RankedMessages AS (
         SELECT

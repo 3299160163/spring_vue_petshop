@@ -169,4 +169,19 @@ public class ChatController {
             return ResponseEntity.status(401).build();
         }
     }
+
+    @DeleteMapping("/messages/{messageId}")
+    public ResponseEntity<?> deleteMessage(
+            @PathVariable Integer messageId,
+            @RequestParam Integer currentUserId
+    ) {
+        try {
+            chatService.deleteMessageForUser(messageId, currentUserId);
+            return ResponseEntity.ok().build();
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

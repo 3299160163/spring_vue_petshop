@@ -16,4 +16,7 @@ public interface ChatService {
     List<ChatSummaryDTO> findChatSummaries(Integer currentUserId);
 
     boolean isConversationParticipant(Integer currentUserId, Integer sellerId);
+
+    void deleteMessageForUser(Integer messageId, Integer currentUserId);
+
 }

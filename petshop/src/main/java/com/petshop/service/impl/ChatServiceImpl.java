@@ -40,7 +40,6 @@ public class ChatServiceImpl implements ChatService {
     }
 
 
-
     @Override
     public List<ChatSummaryDTO> findChatSummaries(Integer currentUserId) {
         if (!isValidUser(currentUserId)) {
@@ -66,17 +65,43 @@ public class ChatServiceImpl implements ChatService {
         return chatMessageMapper.selectCount(query) > 0;
     }
 
+    @Override
+    @Transactional
+    public void deleteMessageForUser(Integer messageId, Integer currentUserId) {
+        // 1. 验证消息是否存在
+        ChatMessage message = chatMessageMapper.selectById(messageId);
+        if (message == null) {
+            throw new IllegalArgumentException("消息不存在");
+        }
+
+        // 2. 验证当前用户是否有权限删除（发送方或接收方）
+        if (!currentUserId.equals(message.getSenderId()) && !currentUserId.equals(message.getReceiverId())) {
+            throw new SecurityException("无权删除该消息");
+        }
+
+        // 3. 根据用户角色更新删除标记
+        if (currentUserId.equals(message.getSenderId())) {
+            // 发送方删除：更新 sender_deleted
+            chatMessageMapper.updateSenderDeleted(messageId, true);
+        } else {
+            // 接收方删除：更新 receiver_deleted
+            chatMessageMapper.updateReceiverDeleted(messageId, true);
+        }
+    }
+
 
     // ====================== 私有工具方法 ======================
     private List<ChatMessage> findMessagesBetweenUsers(Integer user1, Integer user2) {
         QueryWrapper<ChatMessage> query = new QueryWrapper<>();
-        query.and(wrapper -> wrapper
+        query.and(w -> w
                         .eq("sender_id", user1)
                         .eq("receiver_id", user2)
+                        .eq("sender_deleted", false) // 发送方未删除
                 )
-                .or(wrapper -> wrapper
+                .or(w -> w
                         .eq("sender_id", user2)
                         .eq("receiver_id", user1)
+                        .eq("receiver_deleted", false) // 接收方未删除
                 )
                 .orderByAsc("created_at");
         return chatMessageMapper.selectList(query);

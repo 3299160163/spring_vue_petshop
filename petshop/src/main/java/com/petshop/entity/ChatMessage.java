@@ -28,4 +28,11 @@ public class ChatMessage {
     @TableField("created_at")
     private LocalDateTime createdAt;
 
+    // 新增字段：发送方是否删除（默认false）
+    @TableField("sender_deleted")
+    private Boolean senderDeleted = false;
+
+    // 新增字段：接收方是否删除（默认false）
+    @TableField("receiver_deleted")
+    private Boolean receiverDeleted = false;
 }
