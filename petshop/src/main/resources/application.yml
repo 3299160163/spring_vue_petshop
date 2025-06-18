@@ -1,8 +1,8 @@
 server:
   port: 8080
   tomcat:
-      connection-timeout: 30000    # 连接超时时间（毫秒）
-      keep-alive-timeout: 20000    # Keep-Alive连接存活时间（毫秒）
+    connection-timeout: 30000
+    keep-alive-timeout: 20000
 
 spring:
   datasource:
@@ -13,24 +13,52 @@ spring:
     hikari:
       connection-timeout: 30000
       maximum-pool-size: 10
-      # 建议补充其他连接池配置
       minimum-idle: 5
       idle-timeout: 600000
       max-lifetime: 1800000
+      pool-name: PetHikariCP
+
+  data:  # 新增 data 层级
+   redis:
+     host: 127.0.0.1
+     port: 6379
+     database: 0               # 使用独立数据库
+     timeout: 3000ms
+     lettuce:
+      pool:
+        max-active: 20
+        max-idle: 8
+        min-idle: 2
+        max-wait: 200ms
+      shutdown-timeout: 100ms
+     ssl:
+       enabled: false    # 启用 SSL/TLS
+       bundle: redis    # 使用预定义的安全配置包（Spring Boot 3.2+）
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 30m
+      key-prefix: 'PET_CACHE:'
+      use-key-prefix: true
+      cache-null-values: false
 
   servlet:
     multipart:
-      enabled: true  # 确保启用 multipart
+      enabled: true
       max-file-size: 50MB
       max-request-size: 100MB
-        # 禁用 Thymeleaf
+
   thymeleaf:
-      check-template-location: false
-      enabled: false
-  # 文件存储配置（独立配置项）
+    check-template-location: false
+    enabled: false
+
 file:
-  upload-dir: /var/www/uploads/pet_images  # 根据操作系统调整路径
+  upload-dir: /var/www/uploads/pet_images
   allowed-types: jpg,png,jpeg
+
+
+
 
 mybatis-plus:
   global-config:
@@ -64,6 +92,8 @@ logging:
     org.springframework.messaging: TRACE      # 启用消息处理日志
     org.springframework.web.socket: TRACE    # 启用 WebSocket 日志
     org.springframework.web.socket.handler.LoggingWebSocketHandlerDecorator: DEBUG
+
+
 
 
 jwt:

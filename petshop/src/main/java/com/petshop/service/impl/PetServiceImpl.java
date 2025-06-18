@@ -11,6 +11,7 @@ import com.petshop.service.PetService;
 import com.petshop.utils.FileStorageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,12 +36,28 @@ public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements PetSe
 
 
     //首页展示
+//    @Override
+//    @Cacheable(value = "petList",
+//            key = "#category + ':' + #name + ':' + #page + ':' + #size",
+//            unless = "#result == null || #result.records.isEmpty()")
+//    public Page<Pet> getPets(String category, String name, int page, int size) {
+//        Page<Pet> pageParam = new Page<>(page, size);
+//        LambdaQueryWrapper<Pet> wrapper = new LambdaQueryWrapper<>();
+//        wrapper.eq(StringUtils.hasText(category), Pet::getCategory, category)
+//                .like(StringUtils.hasText(name), Pet::getName, name)
+//                .orderByDesc(Pet::getCreateTime);
+//        return petMapper.selectPage(pageParam, wrapper);
+//    }
     @Override
+    @Cacheable(value = "petList",
+            key = "(#category != null ? #category : '') + ':' + (#name != null ? #name : '') + ':' + #page + ':' + #size",
+            unless = "#result == null || #result.total == 0")
     public Page<Pet> getPets(String category, String name, int page, int size) {
         Page<Pet> pageParam = new Page<>(page, size);
         LambdaQueryWrapper<Pet> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(StringUtils.hasText(category), Pet::getCategory, category)
-                .like(StringUtils.hasText(name), Pet::getName, name);
+                .like(StringUtils.hasText(name), Pet::getName, name)
+                .orderByDesc(Pet::getCreateTime);
         return petMapper.selectPage(pageParam, wrapper);
     }
 
