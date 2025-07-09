@@ -1,5 +1,6 @@
 package com.petshop.Api;
 
+import com.petshop.enums.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,5 +41,13 @@ public class ApiResult<T> {
         return new ApiResult<>(200, msg, data);
     }
 
+    // 在ApiResult类中添加新的错误响应方法
+    public static <T> ApiResult<T> fail(ErrorCode errorCode) {
+        return new ApiResult<>(errorCode.getCode(), errorCode.getMessage(), null);
+    }
+
+    public static <T> ApiResult<T> fail(ErrorCode errorCode, String customMessage) {
+        return new ApiResult<>(errorCode.getCode(), customMessage, null);
+    }
 
 }

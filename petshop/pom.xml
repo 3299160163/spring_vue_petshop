@@ -149,6 +149,19 @@
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
 
+		<!-- Spring Boot AMQP Starter -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+
+		<!-- Jackson序列化支持 -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.13.3</version>
+		</dependency>
+
 
 	</dependencies>
 

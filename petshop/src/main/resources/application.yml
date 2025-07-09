@@ -22,7 +22,7 @@ spring:
    redis:
      host: 127.0.0.1
      port: 6379
-     database: 0               # 使用独立数据库
+     database: 1              # 使用独立数据库
      timeout: 3000ms
      lettuce:
       pool:
@@ -35,6 +35,23 @@ spring:
        enabled: false    # 启用 SSL/TLS
        bundle: redis    # 使用预定义的安全配置包（Spring Boot 3.2+）
 
+  # RabbitMQ配置（新增部分）----------------------------------------
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    connection-timeout: 3000
+    publisher-confirm-type: correlated  # 消息发送确认
+    publisher-returns: true             # 启用返回模式
+    listener:
+      simple:
+        acknowledge-mode: manual        # 手动ACK确认
+        prefetch: 100                   # 预取数量
+        concurrency: 5                  # 并发消费者数量
+        max-concurrency: 10
+
   cache:
     type: redis
     redis:
@@ -42,6 +59,7 @@ spring:
       key-prefix: 'PET_CACHE:'
       use-key-prefix: true
       cache-null-values: false
+
 
   servlet:
     multipart:
